@@ -58,8 +58,7 @@ pub fn prehook(attr: TokenStream, item: TokenStream) -> TokenStream {
     // Thank you quote macro for putting random shit in my strings when being used as a literal
     let _ = dllname.remove(0);
     let _ = dllname.remove(dllname.len() - 1);
-    dllname.push('_'); // The original DLL will be of the same name, just with a _ behind it
-
+    insert_underscore(&mut dllname);
     let _ = function_name.remove(0);
     let _ = function_name.remove(function_name.len() - 1);
     new_stream.extend::<TokenStream>(TokenStream::from_iter(
@@ -173,8 +172,7 @@ pub fn posthook(attr: TokenStream, item: TokenStream) -> TokenStream {
     // Thank you quote macro for putting random shit in my strings when being used as a literal
     let _ = dllname.remove(0);
     let _ = dllname.remove(dllname.len() - 1);
-    dllname.push('_'); // The original DLL will be of the same name, just with a _ behind it
-
+    insert_underscore(&mut dllname);
     let _ = function_name.remove(0);
     let _ = function_name.remove(function_name.len() - 1);
     new_stream.extend::<TokenStream>(TokenStream::from_iter(
@@ -289,7 +287,7 @@ pub fn fullhook(attr: TokenStream, item: TokenStream) -> TokenStream {
     // Thank you quote macro for putting random shit in my strings when being used as a literal
     let _ = dllname.remove(0);
     let _ = dllname.remove(dllname.len() - 1);
-    dllname.push('_'); // The original DLL will be of the same name, just with a _ behind it
+    insert_underscore(&mut dllname);
 
     let _ = function_name.remove(0);
     let _ = function_name.remove(function_name.len() - 1);
@@ -402,4 +400,17 @@ fn fn_args_as_params(input: TokenStream) -> TokenStream {
     quote! { #(#param_names),* }.into()
     
     
+}
+
+fn insert_underscore(name: &mut String) {
+    let mut i = name.len() - 1;
+    for char in name.chars().rev() {
+        if char == '.' {
+            name.insert(i, '_');
+            println!("{}", name);
+            break;
+        }
+
+        i -= 1;
+    }
 }
