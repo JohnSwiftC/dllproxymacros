@@ -58,6 +58,7 @@ pub fn prehook(attr: TokenStream, item: TokenStream) -> TokenStream {
     // Thank you quote macro for putting random shit in my strings when being used as a literal
     let _ = dllname.remove(0);
     let _ = dllname.remove(dllname.len() - 1);
+    dllname.push('_'); // The original DLL will be of the same name, just with a _ behind it
 
     let _ = function_name.remove(0);
     let _ = function_name.remove(function_name.len() - 1);
@@ -229,7 +230,7 @@ pub fn posthook(attr: TokenStream, item: TokenStream) -> TokenStream {
     new_stream
         .extend::<TokenStream>(TokenTree::Group(Group::new(Delimiter::Brace, unsafe_block)).into());
 
-    //println!("{:#?}", new_stream);
+    println!("{:#?}", new_stream);
 
     new_stream
 }
@@ -288,6 +289,7 @@ pub fn fullhook(attr: TokenStream, item: TokenStream) -> TokenStream {
     // Thank you quote macro for putting random shit in my strings when being used as a literal
     let _ = dllname.remove(0);
     let _ = dllname.remove(dllname.len() - 1);
+    dllname.push('_'); // The original DLL will be of the same name, just with a _ behind it
 
     let _ = function_name.remove(0);
     let _ = function_name.remove(function_name.len() - 1);
@@ -393,12 +395,11 @@ fn fn_args_as_params(input: TokenStream) -> TokenStream {
         .collect::<Vec<_>>();
 
     // Generate the parameter list for forwarding
-    let params = if param_names.is_empty() {
-        quote! {}
-    } else {
-        quote! { #(#param_names),* }
-    };
-
-    // Return the generated TokenStream
-    params.into()
+    if param_names.is_empty() {
+        return TokenStream::new()
+    }
+    
+    quote! { #(#param_names),* }.into()
+    
+    
 }
