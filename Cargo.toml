@@ -5,6 +5,7 @@ edition = "2024"
 description = "Set of macros intended to ease DLL proxying through the LoadLibrary Windows API."
 readme = "./README.md"
 repository = "https://github.com/JohnSwiftC/dllproxymacros"
+license = "MIT OR Apache-2.0"
 
 [lib]
 proc-macro = true
