@@ -1,8 +1,6 @@
-use proc_macro::{Delimiter, Group, Ident, Punct, Spacing, TokenStream, TokenTree};
+use proc_macro::{Delimiter, Group, Punct, Spacing, TokenStream, TokenTree};
 use quote::quote;
-use std::ffi::CString;
-use syn::{FnArg, ItemFn, Pat, PatIdent, ReturnType, Type, parse_macro_input, token::Token};
-use winapi::um::libloaderapi::{GetProcAddress, LoadLibraryA};
+use syn::{FnArg, ItemFn, Pat, PatIdent, ReturnType, parse_macro_input};
 
 #[proc_macro_attribute]
 pub fn prehook(attr: TokenStream, item: TokenStream) -> TokenStream {
@@ -10,7 +8,7 @@ pub fn prehook(attr: TokenStream, item: TokenStream) -> TokenStream {
 
     let mut function_sig_stream = Vec::new();
     let function_type = fn_to_fn_ptr(item.clone());
-    let mut function_body;
+    let function_body;
     let mut dllname = attr
         .next()
         .expect("DLL Name must be specified as a literal.")
@@ -124,7 +122,7 @@ pub fn posthook(attr: TokenStream, item: TokenStream) -> TokenStream {
 
     let mut function_sig_stream = Vec::new();
     let function_type = fn_to_fn_ptr(item.clone());
-    let mut function_body;
+    let function_body;
     let mut dllname = attr
         .next()
         .expect("DLL Name must be specified as a literal.")
@@ -243,7 +241,7 @@ pub fn fullhook(attr: TokenStream, item: TokenStream) -> TokenStream {
 
     let mut function_sig_stream = Vec::new();
     let function_type = fn_to_fn_ptr(item.clone());
-    let mut function_body;
+    let function_body;
     let mut dllname = attr
         .next()
         .expect("DLL Name must be specified as a literal.")
