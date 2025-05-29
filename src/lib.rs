@@ -228,7 +228,7 @@ pub fn posthook(attr: TokenStream, item: TokenStream) -> TokenStream {
     new_stream
         .extend::<TokenStream>(TokenTree::Group(Group::new(Delimiter::Brace, unsafe_block)).into());
 
-    println!("{:#?}", new_stream);
+    //println!("{:#?}", new_stream);
 
     new_stream
 }
